@@ -46,59 +46,98 @@ class _HomeState extends State<Home> {
     Hive.box("data").put("tasks", tasks);
   }
 
+  void addTask() {
+    // You make it such that it adds a item to the list of strings ith taks
+    inputHandler.clear();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Add a New Task", style: TextStyle(color: Colors.white)),
+          backgroundColor: mg,
+          content: TextField(
+            controller: inputHandler,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Enter new task",
+              hintStyle: TextStyle(color: Colors.grey[500]),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  if (inputHandler.text != "") {
+                    tasks.add([inputHandler.text, false]);
+                    saveTasks();
+                  }
+                });
+
+                Navigator.pop(context);
+              },
+              child: Text("Add", style: TextStyle(color: Colors.white)),
+            ),
+
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void editTask(String task, int index) {
+    // You make it such that it adds a item to the list of strings ith taks
+    inputHandler.text = task;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Edit Task", style: TextStyle(color: Colors.white)),
+          backgroundColor: mg,
+          content: TextField(
+            controller: inputHandler,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: "Enter new task",
+              hintStyle: TextStyle(color: Colors.grey[500]),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  if (inputHandler.text != "") {
+                    tasks[index][0] = inputHandler.text;
+                    saveTasks();
+                  }
+                });
+
+                Navigator.pop(context);
+              },
+              child: Text("Save", style: TextStyle(color: Colors.white)),
+            ),
+
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel", style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("Yet Another To Do App")),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // You make it such that it adds a item to the list of strings ith taks
-          inputHandler.clear();
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(
-                  "Add a New Task",
-                  style: TextStyle(color: Colors.white),
-                ),
-                backgroundColor: mg,
-                content: TextField(
-                  controller: inputHandler,
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Enter new task",
-                    hintStyle: TextStyle(color: Colors.grey[500]),
-                  ),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        if (inputHandler.text != "") {
-                          tasks.add([inputHandler.text, false]);
-                          saveTasks();
-                        }
-                      });
-
-                      Navigator.pop(context);
-                    },
-                    child: Text("Add", style: TextStyle(color: Colors.white)),
-                  ),
-
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-        },
+        onPressed: addTask,
         backgroundColor: mg,
         foregroundColor: Colors.white,
         child: Icon(Icons.add, size: 36),
@@ -140,24 +179,28 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Padding(padding: EdgeInsetsGeometry.only(left: 10)),
-                Transform.translate(
-                  offset: Offset(0, -1),
-                  child: Text(
-                    tasks[index][0],
-                    style: TextStyle(
-                      color: !tasks[index][1] ? Colors.white : Colors.grey,
+                Expanded(
+                  child: Transform.translate(
+                    offset: Offset(0, -1),
+                    child: GestureDetector(
+                      onTap: () => editTask(tasks[index][0], index),
+                      child: Text(
+                        tasks[index][0],
+                        style: TextStyle(
+                          color: !tasks[index][1] ? Colors.white : Colors.grey,
 
-                      fontSize: 24,
-                      decoration: tasks[index][1]
-                          ? TextDecoration.none
-                          : TextDecoration.none,
-                      decorationColor: Colors.white,
-                      decorationThickness: 2,
+                          fontSize: 24,
+                          decoration: tasks[index][1]
+                              ? TextDecoration.none
+                              : TextDecoration.none,
+                          decorationColor: Colors.white,
+                          decorationThickness: 2,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-
-                Spacer(),
+                Padding(padding: EdgeInsetsGeometry.only(left: 7.5)),
                 GestureDetector(
                   onTap: () {
                     setState(() {

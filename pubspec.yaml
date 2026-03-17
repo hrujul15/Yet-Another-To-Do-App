@@ -39,12 +39,7 @@ dev_dependencies:
     sdk: flutter
   hive_generator: ^2.0.0
   build_runner: ^2.4.0
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
+  flutter_launcher_icons: ^0.10.0
   flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
@@ -84,3 +79,8 @@ flutter:
     - family: PoSt
       fonts:
         - asset: fonts/PoorStory-Regular.ttf
+  
+flutter_icons:
+  android: true
+  image_path: "assets/yatda.png"
+  adaptive_icon_background: false
